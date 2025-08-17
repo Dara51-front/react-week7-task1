@@ -5,19 +5,32 @@ export default function App() {
   const [todoList, setTodoList] = useState([]);
 
   useEffect(() => {
-    fetch("https://dummyjson.com/todos")
+    fetch("http://localhost:3000/todos")
       .then((response) => response.json())
       .then((todos) => {
-        setTodoList(todos.todos);
+        console.log(todos);
+        setTodoList(todos);
       });
   }, []);
 
   return (
     <div className={styles.listTodos}>
       {todoList.map((todo) => (
-        <div className={styles.message} key={todo.id}>
-          {todo.todo}
-        </div>
+        <label className={styles.message}>
+          <input
+            className={styles.checkbox}
+            type="checkbox"
+            name={`checkTodo-${todo.id}`}
+            defaultChecked={todo.completed}
+          />
+          <span
+            className={styles.currentcheckbox}
+            type="checkbox"
+            defaultChecked={todo.completed}
+            key={todo.id}
+          ></span>
+          {todo.title}
+        </label>
       ))}
     </div>
   );

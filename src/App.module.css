@@ -8,11 +8,16 @@
 }
 
 .listTodos {
-  display: contents;
-  text-align: center;
+  list-style: none;
+  padding: 0;
+  margin: 0;
 }
 
 .message {
+  display: flex;
+  align-items: center;
+  position: relative;
+  gap: 10px;
   width: 400px;
   height: auto;
   padding: 5px;
@@ -21,4 +26,50 @@
   border-radius: 10px;
   background-color: rgb(255, 251, 233);
   color: rgb(112, 120, 120);
+}
+
+.checkbox {
+  position: absolute;
+  opacity: 0;
+  height: 0;
+  width: 0;
+  cursor: pointer;
+}
+
+.currentcheckbox {
+  position: relative;
+  top: 20%;
+  left: 0;
+  height: 18px;
+  width: 18px;
+  background-color: #ffd6d6;
+  border: 2px solid #ffb6b6;
+  border-radius: 3px;
+  flex-shrink: 0;
+}
+
+.message:hover .checkbox ~ .currentcheckbox {
+  background-color: #ffeded;
+}
+
+.checkbox:checked ~ .currentcheckbox {
+  background-color: #f29a9a;
+  border-color: #ffcaca;
+}
+
+.checkbox:checked ~ .currentcheckbox::after {
+  display: block;
+}
+
+.currentcheckbox::after {
+  content: "";
+  position: absolute;
+  display: none;
+  left: 5px;
+  top: 1px;
+  width: 5px;
+  height: 10px;
+  border: solid #fdf6dc;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
 }
