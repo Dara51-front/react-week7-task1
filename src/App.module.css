@@ -1,8 +1,15 @@
+body,
+html {
+  margin: 0;
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
 #root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
   font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
     "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
 }
@@ -15,6 +22,7 @@
 
 .message {
   display: flex;
+  justify-content: space-between;
   align-items: center;
   position: relative;
   gap: 10px;
@@ -35,6 +43,11 @@
   width: 0;
   cursor: pointer;
 }
+.checkboxLabel {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
 
 .currentcheckbox {
   position: relative;
@@ -42,19 +55,18 @@
   left: 0;
   height: 18px;
   width: 18px;
-  background-color: #ffd6d6;
-  border: 2px solid #ffb6b6;
+  background-color: #ffc8c8;
+  border: 2px solid transparent;
   border-radius: 3px;
   flex-shrink: 0;
 }
 
 .message:hover .checkbox ~ .currentcheckbox {
-  background-color: #ffeded;
+  background-color: #f4b8b8;
 }
 
 .checkbox:checked ~ .currentcheckbox {
   background-color: #f29a9a;
-  border-color: #ffcaca;
 }
 
 .checkbox:checked ~ .currentcheckbox::after {
@@ -65,11 +77,72 @@
   content: "";
   position: absolute;
   display: none;
-  left: 5px;
+  left: 7px;
   top: 1px;
   width: 5px;
   height: 10px;
-  border: solid #fdf6dc;
+  border: solid #fcfbf6;
   border-width: 0 2px 2px 0;
   transform: rotate(45deg);
+}
+
+.deleteButton {
+  background-color: #fbbebe;
+  color: #fcfbf6;
+  padding: 2px 8px 5px 8px;
+  border: 1px solid transparent;
+}
+
+.deleteButton:hover {
+  background-color: #f29a9a;
+  border: 1px solid transparent;
+  outline: none;
+}
+
+.deleteButton:focus {
+  outline: none;
+}
+
+.changeButtons {
+  display: flex;
+  justify-content: right;
+}
+
+.changeContentButton {
+  width: 32px;
+  background-color: #cadaae;
+  color: #fcfbf6;
+  padding: 2px 7px 5px 7px;
+  margin-right: 5px;
+  border: 1px solid transparent;
+}
+
+.changeContentButton:focus {
+  outline: none;
+}
+
+.changeContentButton:hover {
+  background-color: #c0cda9;
+  border: 1px solid transparent;
+  outline: none;
+}
+
+.editTask {
+  font-size: 17px;
+  border: none;
+  width: 400px;
+  height: auto;
+  background-color: rgb(255, 251, 233);
+  color: rgb(112, 120, 120);
+}
+
+.editTask:focus {
+  outline: none;
+}
+
+.notFoundDiv {
+  color: #f58484;
+  font-size: 18px;
+  margin-left: 7px;
+  margin-top: 3px;
 }

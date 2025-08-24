@@ -1,0 +1,51 @@
+.newTodoInput {
+  display: inline;
+  margin-left: 5px;
+  margin-right: 7px;
+  padding: 5px;
+  border: 3px #bababa solid;
+  color: hsl(0, 0%, 59%);
+  border-radius: 10px;
+  width: 340px;
+  height: 30px;
+  font-size: 17px;
+}
+
+.newTodoInput:focus {
+  outline: none;
+  border: 3px #9a9999 solid;
+}
+
+.newTodoInput:hover {
+  outline: none;
+  border: 3px #9a9999 solid;
+}
+
+.addButton {
+  outline: none;
+  display: inline-block;
+  background-color: #fbbebe;
+  display: inline;
+  align-items: center;
+  width: 52px;
+  color: rgb(255, 255, 255);
+}
+
+.addButton:hover {
+  border: 1px solid transparent;
+  outline: none;
+  background-color: #f29a9a;
+}
+
+.buttonContent {
+  display: inline-block;
+  transform: rotate(45deg);
+}
+
+.addButton:focus {
+  outline: none;
+}
+
+.addButton:disabled {
+  background-color: rgb(214, 204, 204);
+}

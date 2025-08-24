@@ -1,0 +1,72 @@
+.searchInput {
+  display: inline;
+  outline: none;
+  margin-left: 5px;
+  margin-right: 7px;
+  margin-bottom: 5px;
+  padding: 5px;
+  color: rgb(156, 155, 155);
+  border: 3px #cadaae solid;
+  border-radius: 10px;
+  width: 340px;
+  height: 30px;
+  font-size: 17px;
+}
+.searchInput:hover {
+  border: 3px #b9ca9c solid;
+}
+
+.searchInput:focus {
+  border: 3px #b9ca9c solid;
+}
+.controlPanel {
+  display: flex;
+}
+.sortingCheckBox {
+  position: absolute;
+  opacity: 0;
+  height: 0;
+  width: 0;
+  cursor: pointer;
+}
+
+.currentSortingCheckBox {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.currentSortingCheckBox::after {
+  content: "";
+  position: relative;
+  border: 3px solid #fff;
+  height: 10px;
+  width: 10px;
+  left: 37%;
+  top: 13px;
+  border-width: 0 3px 3px 0;
+  transform: rotate(45deg);
+}
+
+.sortingLabel {
+  height: 42px;
+  width: 52px;
+  background-color: #cadaae;
+  border-radius: 10px;
+}
+
+.sortingLabel:hover {
+  background-color: #c0cda9;
+  border-radius: 10px;
+}
+
+.sortingCheckBox:checked ~ .currentSortingCheckBox::after {
+  content: "";
+  position: relative;
+  border: 3px solid #ff8a8a;
+  height: 10px;
+  width: 10px;
+  left: 36%;
+  top: 14px;
+  transform: rotate(45deg);
+}
