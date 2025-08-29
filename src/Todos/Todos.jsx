@@ -1,5 +1,7 @@
 import { useState } from "react";
 import styles from "../App.module.css";
+import { ref, set } from "firebase/database";
+import { db } from "../firebase.js";
 
 export const Todo = ({ id, completed, title, onDelete }) => {
   const [editNow, setEditNow] = useState(false);
@@ -17,32 +19,25 @@ export const Todo = ({ id, completed, title, onDelete }) => {
 
   const onCheckTodoChange = ({ target }) => {
     setIsCompleted(target.checked);
-    fetch(`http://localhost:3000/todos/${id}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json;charset=utf-8" },
-      body: JSON.stringify({
-        userId: 1,
-        title: title,
-        completed: target.checked,
-      }),
-    })
-      .then((rawResponse) => rawResponse.json())
-      .then((response) => {
-        console.log(`Задача ${id} выполнена:`, response);
-      });
+
+    const changedCompleteStatus = ref(db, `todos/${id}`);
+    set(changedCompleteStatus, {
+      userId: 1,
+      title: title,
+      completed: target.checked,
+    }).then((response) => {
+      console.log(`Задача ${id} выполнена:`, response);
+    });
   };
 
   const onSaveNewContentClick = () => {
-    fetch(`http://localhost:3000/todos/${id}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json;charset=utf-8" },
-      body: JSON.stringify({
-        userId: 1,
-        title: changedTodo,
-        completed: completed,
-      }),
+    const changedTodoDbRef = ref(db, `todos/${id}`);
+
+    set(changedTodoDbRef, {
+      userId: 1,
+      title: changedTodo,
+      completed: completed,
     })
-      .then((rawResponse) => rawResponse.json())
       .then((response) => {
         console.log(`Задача ${id} обновлена:`, response);
       })

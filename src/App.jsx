@@ -3,22 +3,41 @@ import styles from "./App.module.css";
 import { Todo } from "./Todos/Todos.jsx";
 import { ToAddTodo } from "./ToAddTodo/ToAddTodo.jsx";
 import { ControlPanel } from "./ControlPanel/ControlPanel.jsx";
+import { ref, onValue, remove } from "firebase/database";
+import { db } from "./firebase.js";
 
 export default function App() {
-  const [todoList, setTodoList] = useState([]);
+  const [todoList, setTodoList] = useState({});
   const [isFoundTodo, setIsFoundTodo] = useState(true);
-  const [foundedTodoList, setFoundedTodoList] = useState([]);
+  const [foundedTodoList, setFoundedTodoList] = useState({});
   const [isSearchActive, setIsSearchActive] = useState(false);
   const [isSortingEnabled, setIsSortingEnabled] = useState(false);
 
   useEffect(() => {
-    fetch("http://localhost:3000/todos")
-      .then((response) => response.json())
-      .then((todos) => {
-        setTodoList(todos);
-        setFoundedTodoList(todos);
-      });
+    const todosDbRef = ref(db, "todos");
+
+    return onValue(todosDbRef, (snapshot) => {
+      const loadedTodos = snapshot.val() || {};
+      setTodoList(loadedTodos);
+      setIsFoundTodo(Object.keys(loadedTodos).length > 0);
+    });
   }, [setTodoList]);
+
+  const getTodosToRender = () => {
+    if (isSearchActive) {
+      return Object.entries(foundedTodoList);
+    } else if (isSortingEnabled) {
+      return Object.entries(todoList)
+        .map(([id, todo]) => ({ id, ...todo }))
+        .sort((a, b) => a.title.localeCompare(b.title))
+        .map((todo) => [
+          todo.id,
+          { completed: todo.completed, title: todo.title },
+        ]);
+    } else {
+      return Object.entries(todoList);
+    }
+  };
 
   return (
     <>
@@ -33,36 +52,28 @@ export default function App() {
       <ToAddTodo setTodoList={setTodoList} todoList={todoList} />
       {isFoundTodo ? (
         <div className={styles.listTodos}>
-          {(isSearchActive
-            ? foundedTodoList
-            : isSortingEnabled
-            ? [...todoList].sort((a, b) => a.title.localeCompare(b.title))
-            : todoList
-          ).map(({ id, completed, title }) => (
+          {getTodosToRender().map(([id, { completed, title }]) => (
             <Todo
               key={id}
               id={id}
               completed={completed}
               title={title}
               todoList={todoList}
-              //
               onDelete={() => {
-                fetch(`http://localhost:3000/todos/${id}`, {
-                  method: "DELETE",
-                })
-                  .then((rawResponse) => {
-                    rawResponse.json();
-                  })
+                const todoDbDeleteRef = ref(db, `todos/${id}`);
+
+                remove(todoDbDeleteRef)
                   .then((response) => {
                     console.log("Задача удалена!");
                   })
                   .finally(() => {
-                    fetch("http://localhost:3000/todos")
-                      .then((response) => response.json())
-                      .then((todos) => {
-                        setTodoList(todos);
-                        setFoundedTodoList(todos);
-                      });
+                    const todosDbRef = ref(db, "todos");
+
+                    onValue(todosDbRef, (snapshot) => {
+                      const loadedTodos = snapshot.val() || {};
+                      setTodoList(loadedTodos);
+                      setFoundedTodoList(loadedTodos);
+                    });
                   });
               }}
             />

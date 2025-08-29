@@ -22,18 +22,27 @@ export const ControlPanel = ({
   useEffect(() => {
     if (!searchPhrase.trim()) {
       setFoundedTodoList(todoList);
-      setIsFoundTodo(todoList.length > 0);
+      setIsFoundTodo(Object.keys(todoList).length > 0);
       setIsSearchActive(false);
       return;
     }
 
-    const results = todoList.filter((todo) => {
+    const results = Object.entries(todoList).filter(([id, todo]) => {
       return todo.title.toLowerCase().includes(searchPhrase.toLowerCase());
     });
-    setFoundedTodoList(results);
-    setIsFoundTodo(results.length > 0);
+
+    const resultsObject = Object.fromEntries(results);
+
+    setFoundedTodoList(resultsObject);
+    setIsFoundTodo(Object.keys(resultsObject).length > 0);
     setIsSearchActive(true);
-  }, [searchPhrase, todoList]);
+  }, [
+    searchPhrase,
+    todoList,
+    setIsFoundTodo,
+    setFoundedTodoList,
+    setIsSearchActive,
+  ]);
 
   return (
     <div className={styles.controlPanel}>

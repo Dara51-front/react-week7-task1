@@ -1,16 +1,14 @@
 {
-  "todos": [
-    {
+  "todos": {
+    "37f9": {
       "userId": 1,
       "title": "я делаю мяу",
-      "completed": true,
-      "id": "37f9"
+      "completed": true
     },
-    {
+    "3bc1": {
       "userId": 1,
       "title": "надо сделать сортировку:(",
-      "completed": false,
-      "id": "3bc1"
+      "completed": false
     }
-  ]
+  }
 }
