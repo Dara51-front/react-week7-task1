@@ -1,7 +1,5 @@
 import { useState, useEffect } from "react";
 import styles from "./ToAddTodo.module.css";
-import { ref, push } from "firebase/database";
-import { db } from "../firebase.js";
 
 export const ToAddTodo = ({ setTodoList, todoList }) => {
   const [newTodoText, setNewTodoText] = useState("");
@@ -23,12 +21,19 @@ export const ToAddTodo = ({ setTodoList, todoList }) => {
   };
 
   const onTodoAddClick = () => {
-    const todosDbRef = ref(db, "todos");
-
-    push(todosDbRef, { userId: 1, title: newTodoText, completed: false })
+    fetch("http://localhost:3000/todos", {
+      method: "POST",
+      headers: { "Content-Type": "application/json; charset=utf-8" },
+      body: JSON.stringify({
+        userId: 1,
+        title: newTodoText,
+        completed: false,
+      }),
+    })
+      .then((rawResponse) => rawResponse.json())
       .then((response) => {
         console.log("Новая задача добавлена:", response);
-        Object.entries(todoList).push(response);
+        todoList.push(response);
         setTodoList([...todoList]);
       })
       .finally(onCleanAddInputBlur);
