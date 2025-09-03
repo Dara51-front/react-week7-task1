@@ -1,10 +1,13 @@
 import { useState } from "react";
 import styles from "../App.module.css";
+import { useTodoState } from "../useCRUD";
 
 export const Todo = ({ id, completed, title, onDelete }) => {
   const [editNow, setEditNow] = useState(false);
   const [changedTodo, setChangedTodo] = useState(title);
   const [isCompleted, setIsCompleted] = useState(completed);
+
+  const { toUpdateTodo } = useTodoState();
 
   const onChangeContent = (event) => {
     event.preventDefault();
@@ -17,38 +20,19 @@ export const Todo = ({ id, completed, title, onDelete }) => {
 
   const onCheckTodoChange = ({ target }) => {
     setIsCompleted(target.checked);
-    fetch(`http://localhost:3000/todos/${id}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json;charset=utf-8" },
-      body: JSON.stringify({
-        userId: 1,
-        title: title,
-        completed: target.checked,
-      }),
-    })
-      .then((rawResponse) => rawResponse.json())
-      .then((response) => {
-        console.log(`Задача ${id} выполнена:`, response);
-      });
+    toUpdateTodo(id, {
+      title: title,
+      completed: target.checked,
+    });
   };
 
   const onSaveNewContentClick = () => {
-    fetch(`http://localhost:3000/todos/${id}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json;charset=utf-8" },
-      body: JSON.stringify({
-        userId: 1,
-        title: changedTodo,
-        completed: completed,
-      }),
-    })
-      .then((rawResponse) => rawResponse.json())
-      .then((response) => {
-        console.log(`Задача ${id} обновлена:`, response);
-      })
-      .finally(() => {
-        setEditNow(false);
-      });
+    toUpdateTodo(id, {
+      title: changedTodo,
+      completed: completed,
+    }).finally(() => {
+      setEditNow(false);
+    });
   };
 
   return (

@@ -1,15 +1,18 @@
 import { useState, useEffect } from "react";
 import styles from "./controlePanel.module.css";
+import { useTodoState } from "../useCRUD.jsx";
 
-export const ControlPanel = ({
-  todoList,
-  setIsFoundTodo,
-  setFoundedTodoList,
-  setIsSearchActive,
-  isSortingEnabled,
-  setIsSortingEnabled,
-}) => {
+export const ControlPanel = () => {
   const [searchPhrase, setSearchPhrase] = useState("");
+
+  const {
+    todoList,
+    setFoundedTodoList,
+    setIsFoundTodo,
+    setIsSearchActive,
+    isSortingEnabled,
+    setIsSortingEnabled,
+  } = useTodoState();
 
   const onSearchPhraseChange = ({ target }) => {
     setSearchPhrase(target.value);
