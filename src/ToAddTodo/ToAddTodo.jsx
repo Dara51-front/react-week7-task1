@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import styles from "./ToAddTodo.module.css";
 import { useTodoState } from "../useCRUD";
 
-export const ToAddTodo = ({ setTodoList, todoList }) => {
+export const ToAddTodo = () => {
   const [newTodoText, setNewTodoText] = useState("");
   const [isFull, setisFull] = useState(true);
 
@@ -24,7 +24,9 @@ export const ToAddTodo = ({ setTodoList, todoList }) => {
   };
 
   const onTodoAddClick = () => {
-    toAddTodo(newTodoText.trim()).then(() => onCleanAddInputBlur());
+    toAddTodo(newTodoText).then(() => {
+      onCleanAddInputBlur();
+    });
   };
 
   return (

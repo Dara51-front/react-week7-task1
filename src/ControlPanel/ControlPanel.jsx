@@ -7,6 +7,7 @@ export const ControlPanel = () => {
 
   const {
     todoList,
+    isSearchActive,
     setFoundedTodoList,
     setIsFoundTodo,
     setIsSearchActive,
@@ -23,19 +24,18 @@ export const ControlPanel = () => {
   };
 
   useEffect(() => {
-    if (!searchPhrase.trim()) {
-      setFoundedTodoList(todoList);
-      setIsFoundTodo(todoList.length > 0);
+    if (!searchPhrase.trim() || searchPhrase === "") {
       setIsSearchActive(false);
+
+      setIsFoundTodo(todoList.length > 0);
       return;
     }
-
+    setIsSearchActive(true);
     const results = todoList.filter((todo) => {
       return todo.title.toLowerCase().includes(searchPhrase.toLowerCase());
     });
     setFoundedTodoList(results);
     setIsFoundTodo(results.length > 0);
-    setIsSearchActive(true);
   }, [searchPhrase, todoList]);
 
   return (

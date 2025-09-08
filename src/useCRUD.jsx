@@ -3,23 +3,23 @@ import { useEffect, useState } from "react";
 export const useTodoState = () => {
   const [todoList, setTodoList] = useState([]);
   const [isFoundTodo, setIsFoundTodo] = useState(true);
-  const [foundedTodoList, setFoundedTodoList] = useState([]);
   const [isSearchActive, setIsSearchActive] = useState(false);
+  const [foundedTodoList, setFoundedTodoList] = useState([]);
   const [isSortingEnabled, setIsSortingEnabled] = useState(false);
 
+  const todosURL = fetch("http://localhost:3000/todos");
   const refreshTodos = () => {
-    return fetch("http://localhost:3000/todos")
+    fetch("http://localhost:3000/todos")
       .then((response) => response.json())
       .then((todos) => {
         setTodoList(todos);
-        setFoundedTodoList(todos);
         return todos;
       });
   };
 
   useEffect(() => {
     refreshTodos();
-  }, []);
+  }, [todosURL]);
 
   // Добавление задач
   const toAddTodo = (title) => {
@@ -70,12 +70,12 @@ export const useTodoState = () => {
     todoList,
     isFoundTodo,
     foundedTodoList,
-    isSearchActive,
     isSortingEnabled,
+    isSearchActive,
 
+    setIsSearchActive,
     setIsFoundTodo,
     setFoundedTodoList,
-    setIsSearchActive,
     setIsSortingEnabled,
 
     refreshTodos,
