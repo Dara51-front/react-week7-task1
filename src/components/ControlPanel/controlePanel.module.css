@@ -2,13 +2,13 @@
   display: inline;
   outline: none;
   margin-left: 5px;
-  margin-right: 7px;
+  margin-right: 5px;
   margin-bottom: 5px;
   padding: 5px;
   color: rgb(156, 155, 155);
   border: 3px #cadaae solid;
   border-radius: 10px;
-  width: 340px;
+  width: 240px;
   height: 30px;
   font-size: 17px;
 }
@@ -20,7 +20,12 @@
   border: 3px #b9ca9c solid;
 }
 .controlPanel {
+  margin: none;
+  width: 419px;
   display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: space-between;
 }
 .sortingCheckBox {
   position: absolute;
@@ -50,7 +55,7 @@
 
 .sortingLabel {
   height: 42px;
-  width: 52px;
+  width: 57px;
   background-color: #cadaae;
   border-radius: 10px;
 }
@@ -69,4 +74,27 @@
   left: 36%;
   top: 14px;
   transform: rotate(45deg);
+}
+
+.searchButton {
+  font-weight: 700;
+  outline: none;
+  display: inline-block;
+  background-color: #fbbebe;
+  display: inline;
+  align-items: center;
+  width: 42px;
+  height: 42px;
+  margin-right: 5px;
+  color: rgb(255, 255, 255);
+  padding: 0px;
+  border: none;
+}
+.searchButton :hover {
+  outline: none;
+  background-color: #e29e9e;
+}
+
+.searchButton:disabled {
+  background-color: #d4caca;
 }

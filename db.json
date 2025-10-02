@@ -1,16 +1,14 @@
 {
   "todos": [
     {
-      "userId": 1,
-      "title": "я делаю мяу",
+      "title": "Я делаю мяу ты делаешь мяу",
       "completed": true,
-      "id": "37f9"
+      "id": "fa88"
     },
     {
-      "userId": 1,
-      "title": "надо доделать...",
-      "completed": false,
-      "id": "00PIxYv"
+      "title": "какая то цитатa толстого про ботинки",
+      "completed": true,
+      "id": "29f4"
     }
   ]
 }

@@ -1,12 +1,10 @@
 import { useState, useEffect } from "react";
 import styles from "./ToAddTodo.module.css";
-import { useTodoState } from "../useCRUD";
+import { useTodoState } from "../../useCRUD";
 
-export const ToAddTodo = () => {
+export const ToAddTodo = ({ toAddTodo }) => {
   const [newTodoText, setNewTodoText] = useState("");
   const [isFull, setisFull] = useState(true);
-
-  const { toAddTodo } = useTodoState();
 
   const onAddTodoChange = (event) => {
     event.preventDefault();

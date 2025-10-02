@@ -6,8 +6,8 @@ export const useTodoState = () => {
   const [isSearchActive, setIsSearchActive] = useState(false);
   const [foundedTodoList, setFoundedTodoList] = useState([]);
   const [isSortingEnabled, setIsSortingEnabled] = useState(false);
+  const [searchPhrase, setSearchPhrase] = useState("");
 
-  const todosURL = fetch("http://localhost:3000/todos");
   const refreshTodos = () => {
     fetch("http://localhost:3000/todos")
       .then((response) => response.json())
@@ -19,7 +19,11 @@ export const useTodoState = () => {
 
   useEffect(() => {
     refreshTodos();
-  }, [todosURL]);
+  }, []);
+
+    const onSearchPhraseChange = ({ target }) => {
+    setSearchPhrase(target.value);
+  };
 
   // Добавление задач
   const toAddTodo = (title) => {
@@ -27,7 +31,6 @@ export const useTodoState = () => {
       method: "POST",
       headers: { "Content-Type": "application/json; charset=utf-8" },
       body: JSON.stringify({
-        userId: 1,
         title: title,
         completed: false,
       }),
@@ -35,7 +38,7 @@ export const useTodoState = () => {
       .then((rawResponse) => rawResponse.json())
       .then((newTodo) => {
         console.log("Новая задача добавлена:", newTodo);
-        refreshTodos();
+        setTodoList([...todoList, newTodo]);
       });
   };
 
@@ -45,25 +48,61 @@ export const useTodoState = () => {
     return fetch(`http://localhost:3000/todos/${id}`, {
       method: "DELETE",
     }).then(() => {
-      refreshTodos();
+      setTodoList(todoList.filter((todo) => todo.id !== id));
     });
   };
 
   //Обновление задач
 
-  const toUpdateTodo = (id, updates) => {
-    return fetch(`http://localhost:3000/todos/${id}`, {
+  const onCheckTodoChange = (id) => {
+    const changedTodoList = todoList.map((todo) =>
+      todo.id === id ? { ...todo, completed: !todo.completed } : todo
+    );
+    setTodoList(changedTodoList);
+    const updatedTodo = changedTodoList.find((todo) => todo.id === id);
+    fetch("http://localhost:3000/todos/" + id, {
       method: "PUT",
-      headers: { "Content-Type": "application/json;charset=utf-8" },
-      body: JSON.stringify({
-        userId: 1,
-        ...updates,
-      }),
+      headers: {
+        "Content-Type": "application/json;charset=utf-8",
+      },
+      body: JSON.stringify(updatedTodo),
     })
-      .then((rawResponse) => rawResponse.json())
-      .then(() => {
-        refreshTodos();
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(response.statusText);
+        }
+        return response.json();
+      })
+
+      .catch((error) => {
+        setError(error);
       });
+  };
+
+  const onSearchClick = () => {
+    setIsSearchActive(true);
+    console.log(searchPhrase)
+    const foundTodo = todoList.filter((todo) =>
+      todo.title.includes(searchPhrase)
+    );
+
+    setFoundedTodoList(foundTodo);    
+    console.log(foundedTodoList)
+    setIsFoundTodo(foundTodo.length > 0);
+  };
+
+  const onNotSearchClick = () => {
+        console.log(isSearchActive, foundedTodoList, isFoundTodo, searchPhrase)
+
+    setIsSearchActive(false);
+    setFoundedTodoList(todoList);
+    setIsFoundTodo(true);
+    setSearchPhrase("");
+    console.log(isSearchActive, foundedTodoList, isFoundTodo, searchPhrase)
+  };
+
+  const onSortClick = () => {
+    setIsSortingEnabled(!isSortingEnabled);
   };
 
   return {
@@ -72,26 +111,30 @@ export const useTodoState = () => {
     foundedTodoList,
     isSortingEnabled,
     isSearchActive,
+    searchPhrase,
 
     setIsSearchActive,
     setIsFoundTodo,
     setFoundedTodoList,
     setIsSortingEnabled,
+    setSearchPhrase,
 
     refreshTodos,
     toAddTodo,
     toDeleteTodo,
-    toUpdateTodo,
+    onSearchClick,
+    onSortClick,
+    onNotSearchClick,
+    onCheckTodoChange,
+    onSearchPhraseChange,
 
     getTodoList: () => {
-      if (!isSearchActive) {
-        if (isSortingEnabled) {
-          return [...todoList].sort((a, b) => a.title.localeCompare(b.title));
-        } else {
-          return todoList;
-        }
+      const list = isSearchActive ? foundedTodoList : todoList;
+
+      if (isSortingEnabled) {
+        return [...list].sort((a, b) => a.title.localeCompare(b.title));
       } else {
-        return foundedTodoList;
+        return list;
       }
     },
   };
